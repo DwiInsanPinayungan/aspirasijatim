@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="meta-title">Layanan Aspirasi Rakyat - DPRD Jawa Timur</title>
+    <meta name="description" id="meta-description" content="Wadah penyampaian aspirasi, saran, dan pengaduan masyarakat secara online kepada DPRD Provinsi Jawa Timur.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="https://static.atnmedia.id/2025/04/23/dprd-jatim-FfhO8.png" alt="Logo Jawa Timur"
+                    class="logo-img" id="logo-header">
+                <div class="logo-text">
+                    <h1 id="site-title-nav">DPRD JATIM</h1>
+                    <p>Provinsi Jawa Timur</p>
+                </div>
+            </a>
+            <div class="nav-links" id="nav-links">
+                <a href="#beranda" class="nav-link active">Beranda</a>
+                <a href="#tata-cara" class="nav-link">Tata Cara</a>
+                <a href="#statistik" class="nav-link">Statistik</a>
+                <a href="#form-aspirasi" class="btn btn-primary btn-sm">Tulis Aspirasi</a>
+            </div>
+            <button class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="beranda">
+        <div class="hero-image">
+            <img src="https://beritajatim.com/wp-content/uploads/2024/03/DPRD-Jatim.webp" alt="Gedung DPRD Jawa Timur"
+                class="hero-main-img" id="hero-img">
+        </div>
+        <div class="hero-bg"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="badge">Layanan Publik Resmi</span>
+                <h1 class="hero-title" id="hero-title">Sampaikan Aspirasi Anda Untuk <span class="highlight">Jawa Timur</span> Lebih
+                    Baik</h1>
+                <p class="hero-subtitle" id="hero-subtitle">Wadah penyampaian aspirasi, saran, dan pengaduan masyarakat secara online
+                    kepada Dewan Perwakilan Rakyat Daerah Provinsi Jawa Timur.</p>
+                <div class="hero-actions">
+                    <a href="#form-aspirasi" class="btn btn-primary btn-lg">
+                        <i class="fas fa-pen-nib"></i> Tulis Aspirasi
+                    </a>
+                    <a href="#tata-cara" class="btn btn-outline btn-lg" id="btn-pelajari-alur">
+                        <i class="fas fa-info-circle"></i> Pelajari Alur
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="wave-bottom">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 120H1440V0C1440 0 1120 120 720 120C320 120 0 0 0 0V120Z" fill="#f8f9fa" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Tata Cara Section -->
+    <section class="tata-cara bg-light" id="tata-cara">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Alur Penyampaian Aspirasi</h2>
+                <p>4 Langkah mudah menyampaikan aspirasi/pengaduan Anda kepada DPRD Jatim</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-icon"><i class="fas fa-pencil-alt"></i></div>
+                    <h3>1. Tulis Laporan</h3>
+                    <p>Isi formulir dengan detail laporan, sertakan bukti atau lampiran jika ada.</p>
+                </div>
+                <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fas fa-share-square"></i></div>
+                    <h3>2. Verifikasi</h3>
+                    <p>Laporan Anda akan diverifikasi oleh admin terkait kelengkapan data.</p>
+                </div>
+                <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fas fa-comments"></i></div>
+                    <h3>3. Tindak Lanjut</h3>
+                    <p>Aspirasi diteruskan kepada komisi DPRD terkait untuk dibahas.</p>
+                </div>
+                <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>4. Selesai</h3>
+                    <p>Anda akan menerima tanggapan atas aspirasi atau pengaduan yang diajukan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistik Section -->
+    <section class="statistik-section mt-5" id="statistik">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Statistik Layanan Kami</h2>
+                <p>Transparansi data penyelesaian aspirasi dari masyarakat di Provinsi Jawa Timur.</p>
+            </div>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-inbox"></i></div>
+                    <div class="stat-info">
+                        <h3 class="stat-number" id="totalAspirasi">0</h3>
+                        <p class="stat-label">Total Aspirasi Masuk</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon process"><i class="fas fa-sync-alt"></i></div>
+                    <div class="stat-info">
+                        <h3 class="stat-number" id="sedangDiproses">0</h3>
+                        <p class="stat-label">Sedang Diproses</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon success"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3 class="stat-number" id="aspirasiSelesai">0</h3>
+                        <p class="stat-label">Aspirasi Selesai</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon rating"><i class="fas fa-star"></i></div>
+                    <div class="stat-info">
+                        <h3 class="stat-number" id="tingkatKepuasan">0/5</h3>
+                        <p class="stat-label">Tingkat Kepuasan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Aspirasi -->
+    <section class="form-section mt-5" id="form-aspirasi">
+        <div class="container container-sm">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h2><i class="fas fa-file-signature"></i> Formulir Pengajuan Aspirasi</h2>
+                    <p>Sampaikan aspirasi Anda dengan data yang valid dan dapat dipertanggungjawabkan.</p>
+                </div>
+                <form id="aspirasiForm" class="aspirasi-form">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                            <input type="text" id="nama" name="nama" class="form-control"
+                                placeholder="Masukkan nama sesuai KTP" required>
+                            <span class="error-msg" id="nama-error"></span>
+                        </div>
+                        <div class="form-group half">
+                            <label for="nik">NIK (Nomor Induk Kependudukan) <span class="required">*</span></label>
+                            <input type="text" id="nik" name="nik" class="form-control" placeholder="16 digit NIK"
+                                maxlength="16" required
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            <span class="error-msg" id="nik-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Alamat Email <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" class="form-control"
+                            placeholder="nama@example.com" required>
+                        <span class="error-msg" id="email-error"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="kategori">Kategori Aspirasi <span class="required">*</span></label>
+                            <select id="kategori" name="kategori" class="form-control" required>
+                                <option value="" disabled selected>Pilih Kategori...</option>
+                                <option value="Infrastruktur">Infrastruktur & Pembangunan</option>
+                                <option value="Pendidikan">Pendidikan</option>
+                                <option value="Kesehatan">Kesehatan</option>
+                                <option value="Ekonomi">Ekonomi & Pertanian</option>
+                                <option value="Sosial">Bantuan Sosial</option>
+                                <option value="Lainnya">Lain-lain</option>
+                            </select>
+                            <input type="text" id="kategori_lainnya" name="kategori_lainnya" class="form-control mt-2"
+                                placeholder="Ketik nama Kategori..." style="display: none; margin-top: 10px;">
+                        </div>
+                        <div class="form-group half">
+                            <label for="kabupaten">Kabupaten/Kota <span class="required">*</span></label>
+                            <select id="kabupaten" name="kabupaten" class="form-control" required>
+                                <option value="" disabled selected>Pilih Domisili...</option>
+                                <option value="Surabaya">Kota Surabaya</option>
+                                <option value="Malang">Kota Malang</option>
+                                <option value="Sidoarjo">Kab. Sidoarjo</option>
+                                <option value="Gresik">Kab. Gresik</option>
+                                <!-- dst -->
+                                <option value="Lainnya">Lainnya...</option>
+                            </select>
+                            <input type="text" id="kabupaten_lainnya" name="kabupaten_lainnya" class="form-control mt-2"
+                                placeholder="Ketik nama Kabupaten/Kota..." style="display: none; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="judul">Ajukan Aspirasi <span class="required">*</span></label>
+                        <input type="text" id="judul" name="judul" class="form-control"
+                            placeholder="Contoh: Perbaikan Jalan Rusak di Kecamatan X" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="isi">Detail Aspirasi/Pengaduan <span class="required">*</span></label>
+                        <textarea id="isi" name="isi" class="form-control" rows="5"
+                            placeholder="Ceritakan detail aspirasi atau keluhan Anda secara jelas..."
+                            required></textarea>
+                    </div>
+
+
+                    <div class="form-footer">
+                        <div class="privacy-policy">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="kebijakan" required>
+                                <span class="checkmark"></span>
+                                <span class="policy-text">Saya menyatakan bahwa data yang saya berikan adalah benar dan
+                                    dapat dipertanggungjawabkan.</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit" id="submitBtn" disabled>
+                            Kirim Aspirasi <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section bg-light" id="faq">
+        <div class="container container-sm">
+            <div class="section-header text-center">
+                <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
+                <p>Temukan jawaban untuk pertanyaan umum seputar layanan aspirasi</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Apakah identitas saya akan dirahasiakan?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ya, kami menjamin kerahasiaan identitas pelapor. Data NIK dan nama lengkap hanya digunakan
+                            untuk proses verifikasi internal dan tidak akan dipublikasikan ke umum.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Berapa lama aspirasi saya akan ditanggapi?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Setelah laporan diverifikasi (maksimal 1x24 jam hari kerja), proses pembahasan hingga tindak
+                            lanjut biasanya memakan waktu 3-7 hari kerja tergantung tingkat kompleksitas masalah yang
+                            dilaporkan.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Bagaimana saya mengetahui status laporan saya?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Setiap aspirasi yang disetorkan akan diberikan nomor tiket. Ke depannya kami akan menyediakan
+                            fitur pelacakan di website ini, namun untuk saat ini Anda akan dihubungi melalui kontak
+                            (jika ada) atau dapat melihat update pada notifikasi yang kami berikan saat selesai.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Apakah boleh laporan tanpa melampirkan bukti?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Boleh. Lampiran bersifat opsional. Namun, kami sangat menyarankan Anda melampirkan foto atau
+                            dokumen bukti pendukung agar laporan Anda lebih kuat dan lebih cepat untuk
+                            diproses/ditindaklanjuti secara akurat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <div class="footer-logo">
+                        <img src="https://static.atnmedia.id/2025/04/23/dprd-jatim-FfhO8.png" alt="Logo Jawa Timur" id="logo-footer">
+                        <h2 id="site-title-footer">DPRD JATIM</h2>
+                    </div>
+                    <p class="footer-desc" id="footer-about-us">Dewan Perwakilan Rakyat Daerah Provinsi Jawa Timur adalah lembaga perwakilan
+                        rakyat daerah tingkat provinsi yang berkedudukan sebagai unsur penyelenggara pemerintahan daerah
+                        provinsi Jawa Timur.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Kontak Kami</h3>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> <a
+                                href="https://www.google.com/maps/search/?api=1&query=DPRD+Provinsi+Jawa+Timur+Jl.+Indrapura+No.+1+Surabaya"
+                                target="_blank" rel="noopener noreferrer" class="contact-link" id="office-address">Jl. Indrapura No.1,
+                                Krembangan Sel., Kec. Krembangan,
+                                Surabaya, Jawa Timur 60175</a></li>
+                        <li><i class="fas fa-phone-alt"></i> <a href="tel:0313524001" class="contact-link" id="contact-phone">(031)
+                                3524001</a></li>
+                        <li><i class="fas fa-envelope"></i> <a
+                                href="https://mail.google.com/mail/?view=cm&fs=1&to=admin@dprd.jatimprov.go.id"
+                                target="_blank" rel="noopener noreferrer"
+                                class="contact-link" id="contact-email">admin@dprd.jatimprov.go.id</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Tautan Cepat</h3>
+                    <ul class="link-list">
+                        <li><a href="#beranda">Beranda</a></li>
+                        <li><a href="#tata-cara">Tata Cara Lapor</a></li>
+                        <li><a href="#form-aspirasi">Kirim Aspirasi</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Ikuti Kami</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" id="social-facebook" target="_blank"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" id="social-twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon" id="social-instagram" target="_blank"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" id="social-youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 DPRD Provinsi Jawa Timur. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SweetAlert2 (Popup Notifications) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

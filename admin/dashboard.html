@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - DPRD Jawa Timur</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <!-- Area Khusus Cetak (Tersembunyi di layar, muncul saat cetak) -->
+    <div id="printable-report"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- CSS Khusus Admin -->
+    <link rel="stylesheet" href="admin-style.css">
+    <!-- html2pdf.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body class="admin-body">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="https://static.atnmedia.id/2025/04/23/dprd-jatim-FfhO8.png" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand">
+                <h3>Admin Panel</h3>
+                <p>Aspirasi Rakyat Jatim</p>
+            </div>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <p class="menu-title">MENU UTAMA</p>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" id="nav-dashboard">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" id="nav-all">
+                        <i class="fas fa-inbox"></i>
+                        <span>Semua Aspirasi</span>
+                        <span class="badge badge-warning ml-auto" id="all-badge">0</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="nav-item-completed">
+                    <a href="#" class="nav-link" id="nav-completed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Aspirasi Selesai</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="nav-item-activity" style="display: none;">
+                    <a href="#" class="nav-link" id="nav-activity">
+                        <i class="fas fa-history"></i>
+                        <span>Aktivitas</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="nav-item-users">
+                    <a href="#" class="nav-link" id="nav-users">
+                        <i class="fas fa-users"></i>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+            </ul>
+
+            <p class="menu-title mt-4">PENGATURAN</p>
+            <ul class="nav-list">
+                <li class="nav-item" id="nav-item-settings">
+                    <a href="#" class="nav-link" id="nav-settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Sistem Web</span>
+                    </a>
+                </li>
+                <li class="nav-item mt-auto">
+                    <a href="index.html" class="nav-link text-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Content Layout -->
+    <div class="main-wrapper" id="mainWrapper">
+        
+        <!-- Top Navbar -->
+        <header class="top-nav">
+            <div class="nav-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari NIK atau Judul Aspirasi...">
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="icon-btn">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+DPRD&background=d32f2f&color=fff&rounded=true&bold=true" alt="Admin" class="avatar">
+                    <div class="user-info">
+                        <span class="user-name">Admin Pusat</span>
+                        <span class="user-role">Super Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="content">
+            <!-- Dashboard View -->
+            <div id="dashboard-view">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Ringkasan Dashboard</h1>
+                        <p class="text-muted">Selamat datang, pantau laporan aspirasi warga hari ini.</p>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download"></i> Unduh Laporan PDF
+                    </button>
+                </div>
+
+                <!-- Dashboard Stats -->
+                <div class="stats-grid">
+                
+                <!-- Card 1 -->
+                <div class="stat-card" id="stat-card-total">
+                    <div class="stat-card-body">
+                        <div class="stat-details">
+                            <h3>Total Aspirasi</h3>
+                            <div class="stat-number stat-value">1,245</div>
+                        </div>
+                        <div class="stat-icon bg-primary-light">
+                            <i class="fas fa-inbox text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-footer">
+                        <span class="text-success"><i class="fas fa-arrow-up"></i> +12 hari ini</span>
+                        <a href="#" id="stat-all-link">Semua Data <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <div class="stat-details">
+                            <h3>Perlu Tindakan</h3>
+                            <div class="stat-number text-warning stat-value">265</div>
+                        </div>
+                        <div class="stat-icon bg-warning-light">
+                            <i class="fas fa-spinner text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-footer">
+                        <span class="text-danger"><i class="fas fa-exclamation-circle"></i> Sedang Diproses</span>
+                        <a href="#" id="stat-manage-link">Kelola <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <div class="stat-details">
+                            <h3>Kasus Selesai</h3>
+                            <div class="stat-number text-success stat-value">980</div>
+                        </div>
+                        <div class="stat-icon bg-success-light">
+                            <i class="fas fa-check-double text-success"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-footer">
+                        <span class="text-success"><i class="fas fa-chart-line"></i> 78% Tingkat Selesai</span>
+                        <a href="#" id="stat-view-link">Lihat <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="stat-card">
+                    <div class="stat-card-body">
+                        <div class="stat-details">
+                            <h3>Wilayah Teraktif</h3>
+                            <div class="stat-number" id="topRegionName">-</div>
+                        </div>
+                        <div class="stat-icon bg-info-light">
+                            <i class="fas fa-building text-info"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-footer">
+                        <span class="text-muted" id="topRegionStats">Belum ada data</span>
+                        <a href="#">Statistik <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Aspirasi Terbaru Masuk</h2>
+                    <div class="table-actions">
+                        <select class="form-control-sm">
+                            <option value="semua">Semua Status</option>
+                            <option value="menunggu">Menunggu</option>
+                            <option value="diproses">Diproses</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No. Tiket</th>
+                                <th>Tanggal</th>
+                                <th>Pengirim</th>
+                                <th>NIK</th>
+                                <th>Kategori</th>
+                                <th>Judul Laporan</th>
+                                <th>Status</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data akan diisi secara dinamis melalui sistem -->
+                            <tr id="empty-row-main">
+                                <td colspan="8" class="text-center text-muted">Belum ada aspirasi masuk baru.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-footer">
+                    <p class="text-muted">Menampilkan 1 hingga 4 dari 1,245 data</p>
+                    <div class="pagination">
+                        <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <span class="page-dots">...</span>
+                        <button class="page-btn">125</button>
+                        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Settings View (Web System) -->
+            <div id="settings-view" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Sistem & Pengaturan Web</h1>
+                        <p class="text-muted">Kelola konten utama yang tampil di halaman depan website secara dinamis.</p>
+                    </div>
+                </div>
+
+                <div class="settings-container">
+                    <div class="table-card p-4">
+                        <form id="settingsForm" class="p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Judul Utama Website</label>
+                                        <input type="text" id="set_site_title" class="form-control" placeholder="Tulis judul website...">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Link Gambar Hero (Background)</label>
+                                        <input type="text" id="set_hero_url" class="form-control" placeholder="https://...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Logo Header URL</label>
+                                        <input type="text" id="set_logo_header" class="form-control" placeholder="https://...">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Logo Footer URL</label>
+                                        <input type="text" id="set_logo_footer" class="form-control" placeholder="https://...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label>Warna Utama Website (Primary Color)</label>
+                                <input type="color" id="set_primary_color" class="form-control" style="height: 45px; padding: 5px;" value="#d32f2f">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label>Subjudul Hero</label>
+                                <textarea id="set_hero_subtitle" class="form-control" rows="2" placeholder="Deskripsi singkat di bawah judul utama..."></textarea>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label>Tentang Kami (Singkat)</label>
+                                <textarea id="set_about_us" class="form-control" rows="3" placeholder="Deskripsi singkat mengenai instansi..."></textarea>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label>Alamat Kantor</label>
+                                <textarea id="set_office_address" class="form-control" rows="2" placeholder="Alamat lengkap instansi..."></textarea>
+                            </div>
+
+                            <hr class="my-4">
+                            <h5 class="mb-3"><i class="fas fa-share-alt mr-2"></i> Media Sosial</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fab fa-facebook mr-1"></i> Facebook</label>
+                                        <input type="text" id="set_social_facebook" class="form-control" placeholder="https://facebook.com/...">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fab fa-instagram mr-1"></i> Instagram</label>
+                                        <input type="text" id="set_social_instagram" class="form-control" placeholder="https://instagram.com/...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fab fa-twitter mr-1"></i> Twitter / X</label>
+                                        <input type="text" id="set_social_twitter" class="form-control" placeholder="https://x.com/...">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fab fa-youtube mr-1"></i> YouTube</label>
+                                        <input type="text" id="set_social_youtube" class="form-control" placeholder="https://youtube.com/...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <h5 class="mb-3"><i class="fas fa-search mr-2"></i> SEO & Metadata</h5>
+                            <div class="form-group">
+                                <label>Meta Title (Tab Browser)</label>
+                                <input type="text" id="set_meta_title" class="form-control" placeholder="Judul yang tampil di Google...">
+                            </div>
+                            <div class="form-group mt-3">
+                                <label>Meta Description</label>
+                                <textarea id="set_meta_description" class="form-control" rows="2" placeholder="Deskripsi ringkas untuk mesin pencari..."></textarea>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email Kontak Footer</label>
+                                        <input type="email" id="set_contact_email" class="form-control" placeholder="email@dprd.go.id">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nomor Telepon Footer</label>
+                                        <input type="text" id="set_contact_phone" class="form-control" placeholder="(031) ...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-2"></i> Simpan Perubahan Sistem
+                                </button>
+                                <button type="button" id="btnResetSettings" class="btn btn-outline ml-2" style="border:1px solid #ddd;">
+                                    Reset Ke Default
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="alert-info-box mt-4" style="background: #e7f3ff; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff;">
+                        <h4 style="color: #0056b3;"><i class="fas fa-info-circle mr-2"></i> Petunjuk Pengaturan</h4>
+                        <p style="font-size: 0.9rem; color: #333;">Perubahan yang Anda simpan di sini akan disimpan ke dalam <b>Sistem Sinkronisasi Data</b>. Halaman depan (Landing Page) akan secara otomatis memperbarui tampilannya begitu halaman di-refresh oleh pengunjung.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Management View -->
+            <div id="users-view" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Manajemen Pengguna</h1>
+                        <p class="text-muted">Kelola akun administrator dan petugas yang memiliki akses ke Dashboard.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnTambahPengguna">
+                        <i class="fas fa-user-plus mr-2"></i> Tambah Pengguna Baru
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2>Daftar Administrator & Petugas</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Nama Lengkap</th>
+                                    <th>Username</th>
+                                    <th>Role / Jabatan</th>
+                                    <th>Terakhir Login</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Baris akan diisi secara dinamis melalui JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="alert-info-box mt-4" style="background: #fff4e5; padding: 20px; border-radius: 10px; border-left: 5px solid #ffa000;">
+                    <h4 style="color: #c67c00;"><i class="fas fa-shield-alt mr-2"></i> Keamanan Akun</h4>
+                    <p style="font-size: 0.9rem; color: #333;">Pastikan untuk memberikan akses hanya kepada personil yang berwenang. Password pengguna yang baru ditambahkan akan dikirimkan melalui email resmi instansi yang didaftarkan.</p>
+                </div>
+            </div>
+
+            <!-- Aspirasi Selesai View -->
+            <div id="completed-view" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Arsip Aspirasi Selesai</h1>
+                        <p class="text-muted">Daftar aspirasi masyarakat yang telah selesai diproses dan ditindaklanjuti.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnExportRekapPDF">
+                        <i class="fas fa-file-pdf mr-2"></i> Unduh Rekap (.pdf)
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2>Riwayat Aspirasi Tuntas</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>No. Tiket</th>
+                                    <th>Tgl. Selesai</th>
+                                    <th>Pengirim</th>
+                                    <th>Email</th>
+                                    <th>Judul Aspirasi</th>
+                                    <th>Kategori</th>
+                                    <th>Status Akhir</th>
+                                    <th class="text-center">Opsi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="compTableBody">
+                                <!-- Data akan diisi secara dinamis -->
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">Belum ada riwayat aspirasi tuntas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Semua Aspirasi View -->
+            <div id="all-aspirasi-view" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Semua Kotak Masuk Aspirasi</h1>
+                        <p class="text-muted">Kelola dan tinjau seluruh aspirasi masyarakat yang masuk ke sistem.</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="search-bar" style="width: 100%; max-width: 400px; margin-bottom: 0;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInbox" placeholder="Cari berdasarkan Nama atau No. Tiket...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="inboxTable">
+                            <thead>
+                                <tr>
+                                    <th>No. Tiket</th>
+                                    <th>Tanggal</th>
+                                    <th>Pengirim</th>
+                                    <th>Email</th>
+                                    <th>Kategori</th>
+                                    <th>Judul Laporan</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inboxTableBody">
+                                <!-- Data akan diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Activity Log View -->
+            <div id="activity-view" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Log Aktivitas Sistem</h1>
+                        <p class="text-muted">Pantau seluruh aktivitas yang dilakukan oleh pengelola panel.</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2>Riwayat Aktivitas Terakhir</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Pengelola</th>
+                                    <th>Aktivitas / Tindakan</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activityTableBody">
+                                <!-- Data akan diisi via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script For Sidebar & Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CEK SESI LOGIN ---
+            const sessionData = sessionStorage.getItem('currentUser');
+            if (!sessionData) {
+                window.location.href = 'index.html';
+                return;
+            }
+            const currentUser = JSON.parse(sessionData);
+
+            // Update UI Profil
+            const userNameEl = document.querySelector('.user-name');
+            const userRoleEl = document.querySelector('.user-role');
+            if (userNameEl) userNameEl.innerText = currentUser.name;
+            if (userRoleEl) userRoleEl.innerText = currentUser.role;
+
+            // --- ROLE BASED ACCESS CONTROL (SIDEBAR) ---
+            if (currentUser.role !== 'Super Admin') {
+                const navUsers = document.getElementById('nav-item-users');
+                const navSettings = document.getElementById('nav-item-settings');
+                const navActivity = document.getElementById('nav-item-activity');
+                if (navUsers) navUsers.style.display = 'none';
+                if (navSettings) navSettings.style.display = 'none';
+                if (navActivity) navActivity.style.display = 'none';
+                const cardTotal = document.getElementById('stat-card-total');
+                if (cardTotal) cardTotal.style.display = 'none';
+            } else {
+                const navActivity = document.getElementById('nav-item-activity');
+                if (navActivity) navActivity.style.display = 'block';
+            }
+
+            // --- HELPER LOG AKTIVITAS ---
+            async function logActivity(action, color = 'text-info', icon = 'fa-info-circle') {
+                const logData = {
+                    user: currentUser.name,
+                    action: action,
+                    time: new Date().toLocaleString('id-ID'),
+                    icon: icon,
+                    color: color
+                };
+                try {
+                    await fetch('/api/activity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(logData)
+                    });
+                    renderActivityLogs();
+                } catch (err) {
+                    console.error("Gagal log activity:", err);
+                }
+            }
+
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => sidebar.classList.add('show'));
+            }
+            if(sidebarClose) {
+                sidebarClose.addEventListener('click', () => sidebar.classList.remove('show'));
+            }
+            if(mainWrapper) {
+                mainWrapper.addEventListener('click', () => {
+                    if(window.innerWidth <= 992 && sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                    }
+                });
+            }
+
+            // --- LOGIKA PERPINDAHAN MENU (VIEW SWITCHER) ---
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navSettings = document.getElementById('nav-settings');
+            const navUsers = document.getElementById('nav-users');
+            const navCompleted = document.getElementById('nav-completed');
+            const navAll = document.getElementById('nav-all');
+            
+            const dashboardView = document.getElementById('dashboard-view');
+            const settingsView = document.getElementById('settings-view');
+            const usersView = document.getElementById('users-view');
+            const completedView = document.getElementById('completed-view');
+            const allView = document.getElementById('all-aspirasi-view');
+
+            // --- MODEL DATA ROLE & WORKFLOW ---
+            const ROLES = {
+                SUPER_ADMIN: 'Super Admin',
+                VALIDASI: 'Petugas Validasi',
+                PROGRES: 'Petugas Progres'
+            };
+
+            // Inisialisasi Data User (Sinkronisasi dengan login)
+            if(!localStorage.getItem('users_data')) {
+                // Biarkan index.html yang menghandle inisialisasi utama, 
+                // tapi sediakan fallback jika dashboard dibuka langsung.
+                const initialUsers = [
+                    { id: 1, name: "Admin Pusat", email: "admin@dprd.jt", username: "admin", password: "123", role: ROLES.SUPER_ADMIN, lastLogin: "Baru saja" },
+                    { id: 2, name: "Petugas Validasi 1", email: "val1@dprd.jt", username: "petugas1", password: "123", role: ROLES.VALIDASI, lastLogin: "10 menit yang lalu" },
+                    { id: 3, name: "Petugas Progres Jatim", email: "prog@dprd.jt", username: "petugas2", password: "123", role: ROLES.PROGRES, lastLogin: "3 jam yang lalu" }
+                ];
+                localStorage.setItem('users_data', JSON.stringify(initialUsers));
+            }
+
+            // let currentUser = {
+            //     name: "Admin Pusat",
+            //     role: ROLES.SUPER_ADMIN
+            // };
+
+            function updateStatus(tiket, currentStatus) {
+                let options = {};
+                let title = "Update Status Aspirasi";
+
+                if (currentStatus === 'Baru') {
+                    if (currentUser.role === ROLES.VALIDASI || currentUser.role === ROLES.SUPER_ADMIN) {
+                        options = { 'Validasi': 'Validasi (Setujui Laporan)' };
+                    } else {
+                        Swal.fire('Akses Dibatasi', 'Hanya Petugas Validasi yang bisa memverifikasi laporan baru.', 'error');
+                        return;
+                    }
+                } else if (currentStatus === 'Validasi') {
+                    if (currentUser.role === ROLES.PROGRES || currentUser.role === ROLES.SUPER_ADMIN) {
+                        options = { 'Diproses': 'Diproses (Tindak Lanjut Lapangan)' };
+                    } else {
+                        Swal.fire('Akses Dibatasi', 'Hanya Petugas Progres yang bisa menindaklanjuti laporan.', 'error');
+                        return;
+                    }
+                } else if (currentStatus === 'Diproses') {
+                    if (currentUser.role === ROLES.SUPER_ADMIN) {
+                        options = { 'Selesai': 'Selesai (Konfirmasi Tuntas)' };
+                    } else {
+                        Swal.fire('Akses Dibatasi', 'Hanya Super Admin yang bisa menutup laporan ini.', 'error');
+                        return;
+                    }
+                } else if (currentStatus === 'Selesai') {
+                    Swal.fire('Informasi', 'Aspirasi ini sudah selesai dan tidak bisa diubah lagi.', 'info');
+                    return;
+                }
+
+                Swal.fire({
+                    title: title,
+                    text: `Tiket: ${tiket}`,
+                    input: 'select',
+                    inputOptions: options,
+                    inputPlaceholder: 'Pilih Status Selanjutnya',
+                    showCancelButton: true,
+                    confirmButtonText: 'Update Status',
+                    confirmButtonColor: 'var(--primary)',
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Anda harus memilih status!');
+                        }
+                        return value;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Simulasi update di LocalStorage
+                        let data = JSON.parse(localStorage.getItem('aspirasi_masuk')) || [];
+                        const idx = data.findIndex(a => a.tiket === tiket);
+                        if (idx !== -1) {
+                            const oldStatus = data[idx].status || 'Baru';
+                            data[idx].status = result.value;
+                            localStorage.setItem('aspirasi_masuk', JSON.stringify(data));
+                            
+                            logActivity(`Update status ${tiket}: ${oldStatus} -> ${result.value}`, 'text-warning', 'fa-exchange-alt');
+
+                            if (result.value === 'Selesai') {
+                                // --- FITUR OTOMATIS: GENERATE PDF & SIMULASI FORWARD ---
+                                const aspirasi = data[idx];
+                                const tempDiv = document.createElement('div');
+                                tempDiv.id = 'temp-pdf-export';
+                                tempDiv.style.padding = '40px';
+                                tempDiv.style.background = '#fff';
+                                tempDiv.innerHTML = `
+                                    <div style="width: 100%; color: #000; font-family: 'Times New Roman', Times, serif; line-height: 1.4;">
+                                        <table style="width: 100%; border-bottom: 4px double #000; margin-bottom: 25px; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="width: 15%; text-align: center; padding-bottom: 10px;">
+                                                    <img src="../img/logo-jatim.png" alt="Logo" style="height: 85px; width: auto;">
+                                                </td>
+                                                <td style="width: 70%; text-align: center; padding-bottom: 10px;">
+                                                    <h2 style="margin: 0; font-size: 1.4rem; font-weight: bold; text-transform: uppercase;">PEMERINTAH PROVINSI JAWA TIMUR</h2>
+                                                    <h3 style="margin: 2px 0; font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">DEWAN PERWAKILAN RAKYAT DAERAH</h3>
+                                                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Jl. Indrapura No.1, Krembangan Selatan, Surabaya, Jawa Timur 60175</p>
+                                                    <p style="margin: 0; font-size: 0.85rem;">Telepon: (031) 3522212 | dprd.jatimprov.go.id</p>
+                                                </td>
+                                                <td style="width: 15%;"></td>
+                                            </tr>
+                                        </table>
+                                        <div style="text-align: center; margin-bottom: 20px;">
+                                            <h4 style="margin: 0; text-decoration: underline; font-weight: bold;">SURAT KETERANGAN PENYELESAIAN ASPIRASI</h4>
+                                            <p style="margin: 5px 0;">Nomor: ${aspirasi.tiket}/ASP/DPRD-JT/${new Date().getFullYear()}</p>
+                                        </div>
+                                        <p>Yang bertanda tangan di bawah ini menerangkan bahwa aspirasi pelapor:</p>
+                                        <table style="width: 100%; margin: 15px 0;">
+                                            <tr><td style="width: 120px;">Nama</td><td>: <b>${aspirasi.nama}</b></td></tr>
+                                            <tr><td>NIK</td><td>: ${aspirasi.nik}</td></tr>
+                                            <tr><td>Email</td><td>: ${aspirasi.email}</td></tr>
+                                            <tr><td>Kategori</td><td>: ${aspirasi.kategori}</td></tr>
+                                        </table>
+                                        <p>Telah <b>SELESAI</b> ditindaklanjuti oleh Komisi terkait di DPRD Provinsi Jawa Timur.</p>
+                                        <div style="margin-top: 30px; text-align: right;">
+                                            <p>Surabaya, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                            <br><br><br>
+                                            <p><b>Sekretariat DPRD Jatim</b></p>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                const opt = {
+                                    margin: 0.5,
+                                    filename: `Aspirasi_${aspirasi.tiket}_${aspirasi.nama.replace(/\s+/g, '_')}.pdf`,
+                                    image: { type: 'jpeg', quality: 0.98 },
+                                    html2canvas: { scale: 2 },
+                                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                                };
+
+                                html2pdf().set(opt).from(tempDiv).save();
+
+                                Swal.fire({
+                                    title: 'Laporan Tuntas!',
+                                    html: `Notifikasi penyelesaian & <b>Lampiran PDF</b> telah dikirimkan secara otomatis ke email pelapor (<b>${aspirasi.email}</b>).`,
+                                    icon: 'success'
+                                });
+                            } else {
+                                Swal.fire('Berhasil!', `Status diperbarui ke: ${result.value}`, 'success');
+                            }
+                            renderInboxData();
+                            renderCompletedData();
+                            updateDashboardStats();
+                            // location.reload(); // Tidak perlu reload lagi jika render dipanggil manual
+                        }
+                    }
+                });
+            }
+
+            // --- LOGIKA PERPINDAHAN MENU (VIEW SWITCHER) ---
+            function switchView(viewName) {
+                const views = {
+                    'dashboard': { nav: navDashboard, el: dashboardView, init: updateDashboardStats },
+                    'settings': { nav: navSettings, el: settingsView, init: loadCurrentSettings },
+                    'users': { nav: navUsers, el: usersView, init: renderUsers },
+                    'completed': { nav: navCompleted, el: completedView, init: renderCompletedData },
+                    'all': { nav: navAll, el: allView, init: renderInboxData },
+                    'activity': { nav: document.getElementById('nav-activity'), el: document.getElementById('activity-view'), init: renderActivityLogs }
+                };
+
+                // Remove all active classes and hide all views
+                Object.values(views).forEach(v => {
+                    if(v.nav) v.nav.classList.remove('active');
+                    if(v.el) v.el.style.display = 'none';
+                });
+
+                // Activate selected view
+                const selected = views[viewName];
+                if(selected) {
+                    if(selected.nav) selected.nav.classList.add('active');
+                    if(selected.el) selected.el.style.display = 'block';
+                    if(selected.init) selected.init();
+                }
+            }
+
+            if(navDashboard) navDashboard.addEventListener('click', (e) => { e.preventDefault(); switchView('dashboard'); });
+            if(navSettings) navSettings.addEventListener('click', (e) => { e.preventDefault(); switchView('settings'); });
+            if(navUsers) navUsers.addEventListener('click', (e) => { e.preventDefault(); switchView('users'); });
+            if(navCompleted) navCompleted.addEventListener('click', (e) => { e.preventDefault(); switchView('completed'); });
+            if (navAll) navAll.addEventListener('click', (e) => { e.preventDefault(); switchView('all'); });
+            
+            // Stats Card Interactivity
+            const statAllLink = document.getElementById('stat-all-link');
+            const statManageLink = document.getElementById('stat-manage-link');
+            const statViewLink = document.getElementById('stat-view-link');
+
+            if(statAllLink) statAllLink.addEventListener('click', (e) => { e.preventDefault(); switchView('completed'); });
+            if(statManageLink) statManageLink.addEventListener('click', (e) => { e.preventDefault(); switchView('all'); });
+            if(statViewLink) statViewLink.addEventListener('click', (e) => { e.preventDefault(); switchView('completed'); });
+
+            const navActivityLink = document.getElementById('nav-activity');
+            if (navActivityLink) navActivityLink.addEventListener('click', (e) => { e.preventDefault(); switchView('activity'); });
+            
+            // Fix Logout
+            const logoutLink = document.querySelector('.nav-link.text-danger');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sessionStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // --- LOGIKA PENGATURAN SISTEM WEB ---
+            const settingsForm = document.getElementById('settingsForm');
+            
+            function loadCurrentSettings() {
+                const config = JSON.parse(localStorage.getItem('web_config')) || {
+                    title: "DPRD JATIM - Provinsi Jawa Timur",
+                    hero_url: "https://beritajatim.com/wp-content/uploads/2024/03/DPRD-Jatim.webp",
+                    hero_subtitle: "Wadah penyampaian aspirasi, saran, dan keluhan masyarakat untuk Jawa Timur yang lebih baik.",
+                    email: "setwan@dprd.jatimprov.go.id",
+                    phone: "(031) 3524001",
+                    logo_header: "https://static.atnmedia.id/2025/04/23/dprd-jatim-FfhO8.png",
+                    logo_footer: "https://static.atnmedia.id/2025/04/23/dprd-jatim-FfhO8.png",
+                    primary_color: "#d32f2f",
+                    about_us: "Dewan Perwakilan Rakyat Daerah Provinsi Jawa Timur adalah lembaga perwakilan rakyat daerah tingkat provinsi yang berkedudukan sebagai unsur penyelenggara pemerintahan daerah provinsi Jawa Timur.",
+                    office_address: "Jl. Indrapura No.1, Krembangan Sel., Kec. Krembangan, Surabaya, Jawa Timur 60175",
+                    social_facebook: "https://www.facebook.com/dprdjatim/?locale=id_ID",
+                    social_twitter: "https://x.com/dprdprovjatim",
+                    social_instagram: "https://www.instagram.com/dprdjatim/",
+                    social_youtube: "https://www.youtube.com/@DPRDProvinsiJawaTimur",
+                    meta_title: "Layanan Aspirasi Rakyat - DPRD Jawa Timur",
+                    meta_description: "Wadah penyampaian aspirasi, saran, dan pengaduan masyarakat secara online kepada DPRD Provinsi Jawa Timur."
+                };
+
+                if(document.getElementById('set_site_title')) document.getElementById('set_site_title').value = config.title;
+                if(document.getElementById('set_hero_url')) document.getElementById('set_hero_url').value = config.hero_url;
+                if(document.getElementById('set_hero_subtitle')) document.getElementById('set_hero_subtitle').value = config.hero_subtitle;
+                if(document.getElementById('set_contact_email')) document.getElementById('set_contact_email').value = config.email;
+                if(document.getElementById('set_contact_phone')) document.getElementById('set_contact_phone').value = config.phone;
+                
+                // New Fields
+                if(document.getElementById('set_logo_header')) document.getElementById('set_logo_header').value = config.logo_header || "";
+                if(document.getElementById('set_logo_footer')) document.getElementById('set_logo_footer').value = config.logo_footer || "";
+                if(document.getElementById('set_primary_color')) document.getElementById('set_primary_color').value = config.primary_color || "#d32f2f";
+                if(document.getElementById('set_about_us')) document.getElementById('set_about_us').value = config.about_us || "";
+                if(document.getElementById('set_office_address')) document.getElementById('set_office_address').value = config.office_address || "";
+                if(document.getElementById('set_social_facebook')) document.getElementById('set_social_facebook').value = config.social_facebook || "";
+                if(document.getElementById('set_social_instagram')) document.getElementById('set_social_instagram').value = config.social_instagram || "";
+                if(document.getElementById('set_social_twitter')) document.getElementById('set_social_twitter').value = config.social_twitter || "";
+                if(document.getElementById('set_social_youtube')) document.getElementById('set_social_youtube').value = config.social_youtube || "";
+                if(document.getElementById('set_meta_title')) document.getElementById('set_meta_title').value = config.meta_title || "";
+                if(document.getElementById('set_meta_description')) document.getElementById('set_meta_description').value = config.meta_description || "";
+            }
+
+            if(settingsForm) {
+                settingsForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newConfig = {
+                        title: document.getElementById('set_site_title').value,
+                        hero_url: document.getElementById('set_hero_url').value,
+                        hero_subtitle: document.getElementById('set_hero_subtitle').value,
+                        email: document.getElementById('set_contact_email').value,
+                        phone: document.getElementById('set_contact_phone').value,
+                        
+                        // New Fields
+                        logo_header: document.getElementById('set_logo_header').value,
+                        logo_footer: document.getElementById('set_logo_footer').value,
+                        primary_color: document.getElementById('set_primary_color').value,
+                        about_us: document.getElementById('set_about_us').value,
+                        office_address: document.getElementById('set_office_address').value,
+                        social_facebook: document.getElementById('set_social_facebook').value,
+                        social_instagram: document.getElementById('set_social_instagram').value,
+                        social_twitter: document.getElementById('set_social_twitter').value,
+                        social_youtube: document.getElementById('set_social_youtube').value,
+                        meta_title: document.getElementById('set_meta_title').value,
+                        meta_description: document.getElementById('set_meta_description').value,
+                        
+                        updated_at: new Date().toLocaleString('id-ID')
+                    };
+                    localStorage.setItem('web_config', JSON.stringify(newConfig));
+                    Swal.fire({ title: 'Tersimpan!', text: 'Pengaturan berhasil diperbarui.', icon: 'success' });
+                });
+            }
+
+            const btnReset = document.getElementById('btnResetSettings');
+            if(btnReset) {
+                btnReset.addEventListener('click', () => {
+                    Swal.fire({
+                        title: 'Reset?', text: "Kembali ke setelan pabrik?", icon: 'warning',
+                        showCancelButton: true, confirmButtonText: 'Ya, Reset'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.removeItem('web_config');
+                            loadCurrentSettings();
+                            Swal.fire('Berhasil!', 'Data telah direset.', 'success');
+                        }
+                    });
+                });
+            }
+
+            // --- SISTEM DATA ASPIRASI (TABEL) ---
+            const viewButtons = document.querySelectorAll('.btn-action[title="Lihat Detail"]');
+            const deleteButtons = document.querySelectorAll('.btn-action[title="Hapus Data"]');
+
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const tr = btn.closest('tr');
+                    const noTiket = tr.querySelector('td:first-child').innerText;
+                    const nama = tr.querySelector('.user-title').innerText;
+                    Swal.fire({
+                        title: 'Detail ' + noTiket,
+                        html: `<b>Pengirim:</b> ${nama}<br><br><p>Ini adalah detail data dummy.</p>`,
+                        icon: 'info'
+                    });
+                });
+            });
+
+            // Simulasi Data Baru Masuk dari LocalStorage (Dashboard View)
+            const tableBody = document.querySelector('.data-table tbody');
+            const dataAllInit = JSON.parse(localStorage.getItem('aspirasi_masuk')) || [];
+            
+            // Filter sesuai workflow role
+            let dataMasukInit = [];
+            if (currentUser.role === 'Petugas Validasi') {
+                dataMasukInit = dataAllInit.filter(a => a.status === 'Baru' || !a.status);
+            } else if (currentUser.role === 'Petugas Progres') {
+                dataMasukInit = dataAllInit.filter(a => a.status === 'Validasi');
+            } else if (currentUser.role === 'Super Admin') {
+                dataMasukInit = dataAllInit.filter(a => a.status === 'Diproses');
+            } else {
+                dataMasukInit = dataAllInit.filter(a => a.status !== 'Selesai');
+            }
+
+            if(tableBody && dataMasukInit && dataMasukInit.length > 0) {
+                // Hapus baris kosong jika ada data
+                const emptyRow = document.getElementById('empty-row-main');
+                if(emptyRow) emptyRow.remove();
+                
+                dataMasukInit.forEach(aspirasi => {
+                    const statusClass = (aspirasi.status === 'Baru' || !aspirasi.status) ? 'status-waiting' : 
+                                      (aspirasi.status === 'Validasi' || aspirasi.status === 'Diproses') ? 'status-process' : 'status-success';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><span class="font-weight-bold">${aspirasi.tiket}</span></td>
+                        <td>${aspirasi.tanggal}</td>
+                        <td><div class="user-block"><span class="user-title">${aspirasi.nama}</span></div></td>
+                        <td><span class="text-muted">${aspirasi.nik}</span></td>
+                        <td><span class="badge badge-outline">${aspirasi.kategori}</span></td>
+                        <td class="ticket-title">${aspirasi.judul}</td>
+                        <td><span class="status-indicator ${statusClass}">${aspirasi.status || 'Baru'}</span></td>
+                        <td class="text-center">
+                            <button class="btn-action btn-view-dynamic" title="Lihat"><i class="fas fa-eye"></i></button>
+                            <button class="btn-action btn-status-change" title="Ubah Status" style="color:var(--info); border-color:var(--info);"><i class="fas fa-tasks"></i></button>
+                        </td>
+                    `;
+                    tableBody.insertBefore(tr, tableBody.firstChild);
+                    
+                    tr.querySelector('.btn-view-dynamic').addEventListener('click', () => {
+                        Swal.fire({ title: aspirasi.tiket, html: `<div style="text-align:left;"><b>${aspirasi.nama}</b><br>${aspirasi.judul}<br><br>${aspirasi.isi}</div>`, icon: 'info' });
+                    });
+
+                    tr.querySelector('.btn-status-change').addEventListener('click', () => {
+                        updateStatus(aspirasi.tiket, aspirasi.status || 'Baru');
+                    });
+                });
+            }
+            // --- LOGIKA MANAJEMEN PENGGUNA ---
+            function renderUsers() {
+                const userTableBody = document.querySelector('#users-view .data-table tbody');
+                const users = JSON.parse(localStorage.getItem('users_data')) || [];
+                
+                if(!userTableBody) return;
+                userTableBody.innerHTML = '';
+
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const badgeClass = user.role === ROLES.SUPER_ADMIN ? 'badge-primary' : 'badge-outline';
+                    const badgeStyle = user.role === ROLES.SUPER_ADMIN ? 'background:var(--primary); color:white;' : '';
+                    
+                    tr.innerHTML = `
+                        <td>
+                            <div class="user-block">
+                                <span class="user-title">${user.name}</span>
+                                <span class="user-sub">${user.email}</span>
+                            </div>
+                        </td>
+                        <td><span class="font-weight-bold">${user.username}</span></td>
+                        <td><span class="badge ${badgeClass}" style="${badgeStyle}">${user.role}</span></td>
+                        <td>${user.lastLogin}</td>
+                        <td class="text-center">
+                            <button class="btn-action btn-user-edit" data-id="${user.id}" title="Edit"><i class="fas fa-edit"></i></button>
+                            ${currentUser.role === 'Super Admin' ? `<button class="btn-action btn-user-pass" data-id="${user.id}" title="Ganti Password" style="color:var(--warning); border-color:var(--warning);"><i class="fas fa-key"></i></button>` : ''}
+                            ${user.role !== ROLES.SUPER_ADMIN ? `<button class="btn-action text-danger btn-user-delete" data-id="${user.id}" style="border-color:var(--danger);" title="Hapus"><i class="fas fa-trash-alt"></i></button>` : ''}
+                        </td>
+                    `;
+                    userTableBody.appendChild(tr);
+
+                    // Event Edit
+                    tr.querySelector('.btn-user-edit').addEventListener('click', () => editUser(user.id));
+                    // Event Password
+                    const passBtn = tr.querySelector('.btn-user-pass');
+                    if(passBtn) passBtn.addEventListener('click', () => changePassword(user.id));
+                    // Event Delete
+                    const delBtn = tr.querySelector('.btn-user-delete');
+                    if(delBtn) delBtn.addEventListener('click', () => deleteUser(user.id));
+                });
+            }
+
+            function editUser(id) {
+                const users = JSON.parse(localStorage.getItem('users_data'));
+                const user = users.find(u => u.id === id);
+                if(!user) return;
+
+                Swal.fire({
+                    title: 'Edit Pengguna',
+                    html: `
+                        <div style="text-align:left;">
+                            <label class="font-weight-bold">Nama Lengkap</label>
+                            <input type="text" id="edit-nama" class="swal2-input" value="${user.name}">
+                            <label class="font-weight-bold mt-3 d-block">Email</label>
+                            <input type="email" id="edit-email" class="swal2-input" value="${user.email}">
+                            <label class="font-weight-bold mt-3 d-block">Pilih Role</label>
+                            <select id="edit-role" class="swal2-input" style="width:100%; margin:10px 0;">
+                                <option value="${ROLES.VALIDASI}" ${user.role === ROLES.VALIDASI ? 'selected' : ''}>${ROLES.VALIDASI}</option>
+                                <option value="${ROLES.PROGRES}" ${user.role === ROLES.PROGRES ? 'selected' : ''}>${ROLES.PROGRES}</option>
+                                <option value="${ROLES.SUPER_ADMIN}" ${user.role === ROLES.SUPER_ADMIN ? 'selected' : ''}>${ROLES.SUPER_ADMIN}</option>
+                            </select>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Simpan Perubahan',
+                    confirmButtonColor: 'var(--primary)',
+                    preConfirm: () => {
+                        return {
+                            name: document.getElementById('edit-nama').value,
+                            email: document.getElementById('edit-email').value,
+                            role: document.getElementById('edit-role').value
+                        }
+                    }
+                }).then(result => {
+                    if(result.isConfirmed) {
+                        const idx = users.findIndex(u => u.id === id);
+                        users[idx] = { ...users[idx], ...result.value };
+                        localStorage.setItem('users_data', JSON.stringify(users));
+                        Swal.fire('Updated!', 'Data pengguna telah diperbarui.', 'success');
+                        renderUsers();
+                    }
+                });
+            }
+
+            function deleteUser(id) {
+                Swal.fire({
+                    title: 'Hapus Pengguna?',
+                    text: "Anda tidak dapat mengembalikan tindakan ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--danger)',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const users = JSON.parse(localStorage.getItem('users_data'));
+                        const filtered = users.filter(u => u.id !== id);
+                        localStorage.setItem('users_data', JSON.stringify(filtered));
+                        Swal.fire('Terhapus!', 'Pengguna telah dihapus.', 'success');
+                        renderUsers();
+                    }
+                });
+            }
+
+            const btnTambahPengguna = document.getElementById('btnTambahPengguna');
+            if(btnTambahPengguna) {
+                btnTambahPengguna.addEventListener('click', () => {
+                    Swal.fire({
+                        title: 'Tambah Pengguna Baru',
+                        html: `
+                            <div style="text-align:left;">
+                                <label style="font-size:0.9rem; font-weight:600;">Nama Lengkap</label>
+                                <input type="text" id="swal-nama" class="swal2-input" placeholder="Masukkan nama...">
+                                <label style="font-size:0.9rem; font-weight:600; margin-top:10px; display:block;">Email</label>
+                                <input type="email" id="swal-email" class="swal2-input" placeholder="email@example.com">
+                                <label style="font-size:0.9rem; font-weight:600; margin-top:10px; display:block;">Username</label>
+                                <input type="text" id="swal-username" class="swal2-input" placeholder="Buat username...">
+                                <label style="font-size:0.9rem; font-weight:600; margin-top:10px; display:block;">Kata Sandi Awal</label>
+                                <input type="password" id="swal-password" class="swal2-input" placeholder="Buat password login...">
+                                <label style="font-size:0.9rem; font-weight:600; margin-top:10px; display:block;">Pilih Role</label>
+                                <select id="swal-role" class="swal2-input" style="width: 100%; margin: 10px 0;">
+                                    <option value="${ROLES.VALIDASI}">${ROLES.VALIDASI}</option>
+                                    <option value="${ROLES.PROGRES}">${ROLES.PROGRES}</option>
+                                    <option value="${ROLES.SUPER_ADMIN}">${ROLES.SUPER_ADMIN}</option>
+                                </select>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: 'Simpan User',
+                        confirmButtonColor: 'var(--primary)',
+                        preConfirm: () => {
+                            const name = document.getElementById('swal-nama').value;
+                            const email = document.getElementById('swal-email').value;
+                            const username = document.getElementById('swal-username').value.trim();
+                            const password = document.getElementById('swal-password').value.trim();
+                            const role = document.getElementById('swal-role').value;
+                            if (!name || !username || !email || !password) {
+                                Swal.showValidationMessage('Semua bidang (termasuk password) wajib diisi!');
+                            }
+                            return { id: Date.now(), name, email, username, password, role, lastLogin: 'Belum pernah' };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const users = JSON.parse(localStorage.getItem('users_data')) || [];
+                            users.push(result.value);
+                            localStorage.setItem('users_data', JSON.stringify(users));
+                            
+                            logActivity(`Tambah pengguna baru: ${result.value.username} (${result.value.role})`, 'text-success', 'fa-user-plus');
+                            
+                            Swal.fire('Berhasil!', 'Pengguna baru telah ditambahkan.', 'success');
+                            renderUsers();
+                        }
+                    });
+                });
+            }
+
+            function changePassword(id) {
+                const users = JSON.parse(localStorage.getItem('users_data'));
+                const user = users.find(u => u.id === id);
+                if(!user) return;
+
+                Swal.fire({
+                    title: 'Ganti Password',
+                    text: `User: ${user.name}`,
+                    input: 'password',
+                    inputPlaceholder: 'Masukkan password baru',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Simpan Password',
+                    confirmButtonColor: 'var(--primary)',
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        const idx = users.findIndex(u => u.id === id);
+                        users[idx].password = result.value;
+                        localStorage.setItem('users_data', JSON.stringify(users));
+                        
+                        logActivity(`Ganti password user: ${user.username}`, 'text-danger', 'fa-key');
+                        
+                        Swal.fire('Berhasil!', 'Password telah diperbarui.', 'success');
+                    }
+                });
+            }
+
+            // --- LOGIKA MANAJEMEN SEMUA ASPIRASI ---
+            async function renderInboxData() {
+                const inboxBody = document.getElementById('inboxTableBody');
+                if(!inboxBody) return;
+
+                const response = await fetch('/api/aspirations');
+                const dataAll = await response.json();
+                
+                // --- FILTER BERDASARKAN WORKFLOW ROLE ---
+                let dataMasuk = [];
+                if (currentUser.role === 'Petugas Validasi') {
+                    dataMasuk = dataAll.filter(a => a.status === 'Baru' || !a.status);
+                } else if (currentUser.role === 'Petugas Progres') {
+                    dataMasuk = dataAll.filter(a => a.status === 'Validasi');
+                } else if (currentUser.role === 'Super Admin') {
+                    dataMasuk = dataAll.filter(a => a.status === 'Diproses');
+                } else {
+                    dataMasuk = dataAll.filter(a => a.status !== 'Selesai');
+                }
+
+                const badge = document.getElementById('all-badge');
+                
+                if(badge) badge.innerText = dataMasuk.length;
+                if(!inboxBody) return;
+                
+                if(dataMasuk.length === 0) {
+                    inboxBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Belum ada aspirasi masuk.</td></tr>';
+                    return;
+                }
+
+                inboxBody.innerHTML = '';
+                
+                dataMasuk.forEach(aspirasi => {
+                    const statusClass = aspirasi.status === 'Baru' ? 'status-waiting' : 
+                                      aspirasi.status === 'Validasi' ? 'status-process' : 
+                                      aspirasi.status === 'Diproses' ? 'status-process' : 'status-success';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><span class="font-weight-bold">${aspirasi.tiket}</span></td>
+                        <td>${aspirasi.tanggal}</td>
+                        <td><span class="user-title">${aspirasi.nama}</span></td>
+                        <td><span class="badge badge-outline">${aspirasi.kategori}</span></td>
+                        <td class="ticket-title">${aspirasi.judul}</td>
+                        <td><span class="status-indicator ${statusClass}">${aspirasi.status || 'Baru'}</span></td>
+                        <td class="text-center">
+                            <button class="btn-action btn-view-inbox" title="Lihat"><i class="fas fa-eye"></i></button>
+                            <button class="btn-action btn-status-change-inbox" title="Ubah Status" style="color:var(--info); border-color:var(--info);"><i class="fas fa-tasks"></i></button>
+                        </td>
+                    `;
+                    inboxBody.appendChild(tr);
+                    tr.querySelector('.btn-view-inbox').addEventListener('click', () => {
+                        Swal.fire({ title: aspirasi.tiket, html: `<div style="text-align:left;"><b>${aspirasi.nama}</b><br>${aspirasi.judul}<br><br>${aspirasi.isi}</div>`, icon: 'info' });
+                    });
+                    tr.querySelector('.btn-status-change-inbox').addEventListener('click', () => {
+                        updateStatus(aspirasi.tiket, aspirasi.status || 'Baru');
+                    });
+                });
+            }
+
+            // --- LOGIKA MANAJEMEN ASPIRASI SELESAI ---
+            async function renderCompletedData() {
+                const compBody = document.getElementById('compTableBody');
+                if(!compBody) return;
+
+                const response = await fetch('/api/aspirations');
+                const dataAll = await response.json();
+                const dataSelesai = dataAll.filter(a => a.status === 'Selesai');
+                
+                if(!compBody) return;
+                compBody.innerHTML = '';
+
+                if(dataSelesai.length === 0) {
+                    compBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Belum ada riwayat aspirasi tuntas.</td></tr>';
+                    return;
+                }
+
+                dataSelesai.forEach(aspirasi => {
+                    const tr = document.createElement('tr');
+                    
+                    // Cek jika Super Admin untuk menampilkan tombol hapus
+                    let actionButtons = `<button class="btn-action btn-view-comp" title="Lihat Detail"><i class="fas fa-eye"></i></button>`;
+                    if (currentUser.role === 'Super Admin') {
+                        actionButtons += `
+                            <button class="btn-action btn-delete-comp" title="Hapus Permanen" style="color:#dc3545; border-color:#dc3545; margin-left:5px;">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        `;
+                    }
+
+                    tr.innerHTML = `
+                        <td><span class="font-weight-bold">${aspirasi.tiket}</span></td>
+                        <td>${aspirasi.tanggal}</td>
+                        <td>${aspirasi.nama}</td>
+                        <td><span class="text-muted small">${aspirasi.email || '-'}</span></td>
+                        <td class="ticket-title">${aspirasi.judul}</td>
+                        <td><span class="badge badge-outline">${aspirasi.kategori}</span></td>
+                        <td><span class="status-indicator status-success"><i class="fas fa-check mr-1"></i> Tuntas</span></td>
+                        <td class="text-center">
+                            ${actionButtons}
+                        </td>
+                    `;
+                    compBody.appendChild(tr);
+
+                    // Event Listener Lihat Detail
+                    tr.querySelector('.btn-view-comp').addEventListener('click', () => {
+                        // ... (keep existing detail view logic)
+                    });
+
+                    // Event Listener Hapus (Hanya Super Admin)
+                    const btnDelete = tr.querySelector('.btn-delete-comp');
+                    if (btnDelete) {
+                        btnDelete.addEventListener('click', () => {
+                            Swal.fire({
+                                title: 'Hapus Aspirasi?',
+                                text: `Aspirasi dengan tiket ${aspirasi.tiket} akan dihapus secara permanen dari sistem.`,
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#dc3545',
+                                cancelButtonColor: '#6e7881',
+                                confirmButtonText: 'Ya, Hapus!',
+                                cancelButtonText: 'Batal'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    fetch(`/api/aspirations/${aspirasi.tiket}`, {
+                                        method: 'DELETE'
+                                    })
+                                    .then(() => {
+                                        logActivity(`Hapus permanen aspirasi: ${aspirasi.tiket}`, 'text-danger', 'fa-trash-alt');
+                                        Swal.fire('Terhapus!', 'Data aspirasi telah dihapus dari arsip.', 'success');
+                                        refreshAllData();
+                                    });
+                                }
+                            });
+                        });
+                    }
+
+                    // Logika tombol cetak di dalam swal
+                    tr.querySelector('.btn-view-comp').addEventListener('click', () => {
+                        Swal.fire({ 
+                            title: 'Detail Aspirasi Tuntas',
+                            width: '750px',
+                            padding: '2rem',
+                            html: `
+                                <div class="premium-modal-content">
+                                    <div class="alert alert-info py-2 mb-4" style="border-radius:12px; border:none; background:#f0f7ff; color:#0369a1;">
+                                        <i class="fas fa-check-circle mr-2"></i> Laporan ini telah tuntas diproses dan diarsipkan.
+                                    </div>
+
+                                    <div class="modal-header-section">
+                                        <div class="modal-header-item">
+                                            <span class="modal-header-label">Nomor Tiket</span>
+                                            <span class="modal-header-value text-primary">#${aspirasi.tiket}</span>
+                                        </div>
+                                        <div class="modal-header-item text-right">
+                                            <span class="modal-header-label">Tanggal Selesai</span>
+                                            <span class="modal-header-value">${aspirasi.tanggal}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-sub-section">
+                                        <h6 class="modal-sub-title"><i class="fas fa-user-circle"></i> DATA PELAPOR</h6>
+                                        <div class="modal-info-card">
+                                            <div>
+                                                <span class="info-field-label">Nama Lengkap</span>
+                                                <span class="info-field-value">${aspirasi.nama}</span>
+                                            </div>
+                                            <div>
+                                                <span class="info-field-label">NIK</span>
+                                                <span class="info-field-value">${aspirasi.nik}</span>
+                                            </div>
+                                            <div>
+                                                <span class="info-field-label">Email</span>
+                                                <span class="info-field-value text-primary">${aspirasi.email || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-sub-section">
+                                        <h6 class="modal-sub-title"><i class="fas fa-file-alt"></i> RINCIAN LAPORAN</h6>
+                                        <div class="modal-report-card">
+                                            <div class="modal-report-title">
+                                                <span class="badge badge-outline" style="font-size:0.7rem; padding: 4px 10px;">${aspirasi.kategori}</span>
+                                                ${aspirasi.judul}
+                                            </div>
+                                            <div class="modal-report-body">
+                                                ${aspirasi.isi}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: '<i class="fas fa-print mr-2"></i> Cetak Laporan',
+                            confirmButtonColor: 'var(--primary)',
+                            cancelButtonText: 'Tutup',
+                            customClass: {
+                                confirmButton: 'btn-premium',
+                                container: 'premium-modal-wrapper'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Persiapkan data cetak di area khusus
+                                const printArea = document.getElementById('printable-report');
+                                printArea.innerHTML = `
+                                    <div style="width: 100%; color: #000; font-family: 'Times New Roman', Times, serif; line-height: 1.4;">
+                                        <!-- KOP SURAT (TABEL UNTUK STABILITAS 100%) -->
+                                        <table style="width: 100%; border-bottom: 4px double #000; margin-bottom: 25px; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="width: 15%; text-align: center; padding-bottom: 10px;">
+                                                    <img src="../img/logo-jatim.png" alt="Logo" style="height: 85px; width: auto;">
+                                                </td>
+                                                <td style="width: 70%; text-align: center; padding-bottom: 10px;">
+                                                    <h2 style="margin: 0; font-size: 1.4rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">PEMERINTAH PROVINSI JAWA TIMUR</h2>
+                                                    <h3 style="margin: 2px 0; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">DEWAN PERWAKILAN RAKYAT DAERAH</h3>
+                                                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Jl. Indrapura No.1, Krembangan Selatan, Surabaya, Jawa Timur 60175</p>
+                                                    <p style="margin: 0; font-size: 0.85rem;">Telepon: (031) 3522212, Fax: (031) 3550000 | Website: dprd.jatimprov.go.id</p>
+                                                </td>
+                                                <td style="width: 15%;"></td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- JUDUL SURAT -->
+                                        <div style="text-align: center; margin-bottom: 30px;">
+                                            <h4 style="margin: 0; font-size: 1.15rem; text-decoration: underline; font-weight: bold; text-transform: uppercase;">SURAT KETERANGAN PENYELESAIAN ASPIRASI</h4>
+                                            <p style="margin: 5px 0; font-size: 0.95rem;">Nomor: ${aspirasi.tiket}/ASP/DPRD-JT/${new Date().getFullYear()}</p>
+                                        </div>
+
+                                        <!-- INFO TANGGAL & KATEGORI -->
+                                        <table style="width: 100%; margin-bottom: 25px; font-size: 1rem;">
+                                            <tr>
+                                                <td style="width: 150px; font-weight: bold;">Kategori Laporan</td>
+                                                <td style="width: 15px;">:</td>
+                                                <td style="text-transform: uppercase; font-weight: bold;">${aspirasi.kategori}</td>
+                                                <td style="text-align: right; vertical-align: bottom; font-style: italic;">Diterbitkan: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- I. DATA PELAPOR -->
+                                        <div style="margin-bottom: 25px;">
+                                            <div style="background: #efefef; padding: 6px 12px; font-weight: bold; border: 1px solid #000; margin-bottom: 12px; font-size: 1.05rem;">I. IDENTITAS PELAPOR</div>
+                                            <table style="width: 98%; margin: 0 auto; font-size: 1rem; border-collapse: collapse;">
+                                                <tr>
+                                                    <td style="width: 180px; padding: 6px 0;">Nama Lengkap</td>
+                                                    <td style="width: 20px; text-align: center;">:</td>
+                                                    <td style="font-weight: bold;">${aspirasi.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 6px 0;">NIK / No. Identitas</td>
+                                                    <td style="text-align: center;">:</td>
+                                                    <td>${aspirasi.nik}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 6px 0;">Alamat Email</td>
+                                                    <td style="text-align: center;">:</td>
+                                                    <td>${aspirasi.email || '-'}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <!-- II. ISI ASPIRASI -->
+                                        <div style="margin-bottom: 35px;">
+                                            <div style="background: #efefef; padding: 6px 12px; font-weight: bold; border: 1px solid #000; margin-bottom: 12px; font-size: 1.05rem;">II. RINCIAN ASPIRASI / ADUAN</div>
+                                            <div style="width: 98%; margin: 0 auto;">
+                                                <table style="width: 100%; margin-bottom: 8px;">
+                                                    <tr>
+                                                        <td style="width: 90px; font-weight: bold; vertical-align: top;">Subjek :</td>
+                                                        <td style="font-weight: bold; vertical-align: top;">${aspirasi.judul.toUpperCase()}</td>
+                                                    </tr>
+                                                </table>
+                                                <div style="text-align: justify; line-height: 1.6; border: 1.5px solid #000; padding: 15px; min-height: 180px; background: #fff; font-size: 1rem;">
+                                                    ${aspirasi.isi}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- TANDA TANGAN & FOOTER VALIDASI (DIJADIKAN SATU) -->
+                                        <table style="width: 100%; margin-top: 30px; page-break-inside: avoid;">
+                                            <tr>
+                                                <td style="width: 60%; vertical-align: bottom; padding-bottom: 20px;">
+                                                    <div style="font-size: 0.75rem; color: #555; font-style: italic; border-top: 1px solid #ccc; padding-top: 5px; width: 80%;">
+                                                        Dokumen ini dihasilkan secara otomatis oleh<br>Sistem Aspirasi Digital DPRD Jawa Timur.
+                                                    </div>
+                                                </td>
+                                                <td style="width: 40%; text-align: center; font-size: 1rem;">
+                                                    <p style="margin-bottom: 5px;">Surabaya, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                                    <p style="margin-bottom: 85px; font-weight: bold;">Sekretariat DPRD Provinsi Jawa Timur</p>
+                                                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 2px;">( ......................................... )</p>
+                                                    <p style="font-size: 0.85rem; font-style: italic;">Petugas Pelayanan Administrasi</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                `;
+                                window.print();
+                            }
+                        });
+                    });
+                });
+            }
+
+            async function renderActivityLogs() {
+                const activityBody = document.getElementById('activityTableBody');
+                if(!activityBody) return;
+                
+                const response = await fetch('/api/activity');
+                const logs = await response.json();
+                
+                if(logs.length === 0) {
+                    activityBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Belum ada catatan aktivitas.</td></tr>';
+                    return;
+                }
+
+                activityBody.innerHTML = '';
+                logs.forEach(log => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${log.time}</td>
+                        <td><span class="font-weight-bold">${log.user}</span></td>
+                        <td><i class="fas ${log.icon} mr-2 ${log.color}"></i> ${log.action}</td>
+                        <td class="text-center"><span class="badge badge-success" style="background:#e8f5e9; color:#2e7d32; border:none;">Success</span></td>
+                    `;
+                    activityBody.appendChild(tr);
+                });
+            }
+
+            // --- LOGIKA UPDATE STATS CARDS ---
+            async function updateDashboardStats() {
+                const response = await fetch('/api/aspirations');
+                const data = await response.json();
+                const total = data.length;
+                let pending = 0;
+                
+                // Hitung pending berdasarkan role
+                if (currentUser.role === 'Petugas Validasi') {
+                    pending = data.filter(a => a.status === 'Baru' || !a.status).length;
+                } else if (currentUser.role === 'Petugas Progres') {
+                    pending = data.filter(a => a.status === 'Validasi').length;
+                } else if (currentUser.role === 'Super Admin') {
+                    pending = data.filter(a => a.status === 'Diproses').length;
+                } else {
+                    pending = data.filter(a => a.status !== 'Selesai').length;
+                }
+
+                const done = data.filter(a => a.status === 'Selesai').length;
+
+                const doneEl = document.querySelector('.stat-card:nth-child(3) .stat-value');
+                const badgeSelesai = document.querySelector('.stat-card:nth-child(3) .stat-card-footer span');
+                
+                // Hitung Wilayah Teraktif
+                const regionMap = {};
+                data.forEach(a => {
+                    const reg = a.kabupaten || 'Tidak Diketahui';
+                    regionMap[reg] = (regionMap[reg] || 0) + 1;
+                });
+                
+                let topRegion = '-';
+                let maxCount = 0;
+                for(const [reg, count] of Object.entries(regionMap)) {
+                    if(count > maxCount) {
+                        maxCount = count;
+                        topRegion = reg;
+                    }
+                }
+
+                const topRegionEl = document.getElementById('topRegionName');
+                const topRegionStatsEl = document.getElementById('topRegionStats');
+
+                if (totalEl) totalEl.innerText = total.toLocaleString();
+                if (pendingEl) pendingEl.innerText = pending.toLocaleString();
+                if (pendingTitle && currentUser.role !== 'Super Admin') {
+                    pendingTitle.innerText = "Tugas Anda";
+                }
+                if (doneEl) doneEl.innerText = done.toLocaleString();
+                
+                if (topRegionEl) topRegionEl.innerText = topRegion;
+                if (topRegionStatsEl) {
+                    topRegionStatsEl.innerText = maxCount > 0 ? `${maxCount.toLocaleString()} Laporan Terbanyak` : 'Belum ada data';
+                }
+
+                if(badgeSelesai && total > 0) {
+                    const percent = Math.round((done / total) * 100);
+                    badgeSelesai.innerHTML = `<i class="fas fa-chart-line"></i> ${percent}% Tingkat Selesai`;
+                }
+            }
+
+            async function refreshAllData() {
+                try {
+                    await renderInboxData();
+                    await renderCompletedData();
+                    await updateDashboardStats();
+                    renderActivityLogs();
+                } catch(err) {
+                    console.error("Gagal refresh data:", err);
+                }
+            }
+
+            // --- FITUR EKSPOR REKAP PDF ---
+            const btnExportPDF = document.getElementById('btnExportRekapPDF');
+            if(btnExportPDF) {
+                btnExportPDF.addEventListener('click', async () => {
+                    const response = await fetch('/api/aspirations');
+                    const data = await response.json();
+                    const completedData = data.filter(a => a.status === 'Selesai');
+
+                    if(completedData.length === 0) {
+                        Swal.fire('Informasi', 'Belum ada data aspirasi tuntas untuk direkap.', 'info');
+                        return;
+                    }
+
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.padding = '30px';
+                    tempDiv.style.background = '#fff';
+                    
+                    let tableRows = '';
+                    completedData.forEach((a, index) => {
+                        tableRows += `
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px; text-align: center;">${index + 1}</td>
+                                <td style="border: 1px solid #000; padding: 8px;">${a.tiket}</td>
+                                <td style="border: 1px solid #000; padding: 8px;">${a.tanggal}</td>
+                                <td style="border: 1px solid #000; padding: 8px;">${a.nama}</td>
+                                <td style="border: 1px solid #000; padding: 8px;">${a.judul}</td>
+                                <td style="border: 1px solid #000; padding: 8px;">${a.kategori}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tempDiv.innerHTML = `
+                        <div style="width: 100%; font-family: 'Times New Roman', serif;">
+                            <table style="width: 100%; border-bottom: 4px double #000; margin-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="width: 15%; text-align: center;"><img src="../img/logo-jatim.png" style="height: 70px;"></td>
+                                    <td style="width: 70%; text-align: center;">
+                                        <h2 style="margin:0; font-size: 1.2rem;">PEMERINTAH PROVINSI JAWA TIMUR</h2>
+                                        <h3 style="margin:0; font-size: 1.1rem;">DEWAN PERWAKILAN RAKYAT DAERAH</h3>
+                                        <p style="margin:0; font-size: 0.8rem;">Jl. Indrapura No.1, Surabaya | dprd.jatimprov.go.id</p>
+                                    </td>
+                                    <td style="width: 15%;"></td>
+                                </tr>
+                            </table>
+                            <h4 style="text-align: center; text-decoration: underline; margin-bottom: 20px;">REKAPITULASI ASPIRASI MASYARAKAT (SELESAI)</h4>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                                <thead>
+                                    <tr style="background: #f2f2f2;">
+                                        <th style="border: 1px solid #000; padding: 8px;">No</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">No. Tiket</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">Tanggal</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">Pengirim</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">Judul Aspirasi</th>
+                                        <th style="border: 1px solid #000; padding: 8px;">Kategori</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableRows}
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 30px; text-align: right; font-size: 0.9rem;">
+                                <p>Dicetak pada: ${new Date().toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    const opt = {
+                        margin: 0.3,
+                        filename: `Rekap_Aspirasi_Selesai_${new Date().toISOString().split('T')[0]}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+                    };
+
+                    Swal.fire({
+                        title: 'Memproses PDF...',
+                        html: 'Mohon tunggu sebentar, sistem sedang menyusun rekap data.',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    html2pdf().set(opt).from(tempDiv).save().then(() => {
+                        Swal.fire('Berhasil!', 'Rekap PDF berhasil diunduh.', 'success');
+                    });
+                });
+            }
+
+            // Panggil fungsi awal
+            refreshAllData();
+        });
+    </script>
+</body>
+</html>
