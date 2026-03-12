@@ -280,32 +280,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Reset Button
-                    submitBtnAction.disabled = false;
-                    submitBtnAction.innerHTML = originalText;
-                    
-                    // Show SweetAlert Success Popup
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Aspirasi Berhasil Dikirim!',
-                        html: `Terima kasih atas laporan Anda. Aspirasi Anda telah tercatat dengan nomor tiket <b>${nomorTiket}</b> dan akan segera kami proses oleh tim DPRD Jatim.`,
-                        confirmButtonText: 'Kembali ke Beranda',
-                        confirmButtonColor: '#d32f2f',
-                        allowOutsideClick: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            aspirasiForm.reset(); 
-                            if(submitBtnAction) submitBtnAction.disabled = true;
+                    // Jeda 10 detik sebelum memunculkan popup sukses agar user merasa proses benar-benar dilakukan
+                    setTimeout(() => {
+                        // Reset Button
+                        submitBtnAction.disabled = false;
+                        submitBtnAction.innerHTML = originalText;
+                        
+                        // Show SweetAlert Success Popup
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Aspirasi Berhasil Dikirim!',
+                            html: `Terima kasih atas laporan Anda. Aspirasi Anda telah tercatat dengan nomor tiket <b>${nomorTiket}</b> dan akan segera kami proses oleh tim DPRD Jatim.`,
+                            confirmButtonText: 'Kembali ke Beranda',
+                            confirmButtonColor: '#d32f2f',
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Reset form dan disable tombol submit
+                                aspirasiForm.reset(); 
+                                if(submitBtnAction) submitBtnAction.disabled = true;
 
-                            // Update Statistik Realtime dari Backend
-                            updateLandingStats();
-                            
-                            // Scroll balik ke atas
-                            setTimeout(() => {
+                                // Update Statistik
+                                updateLandingStats();
+                                
+                                // Langsung kembali ke Beranda (Paling atas)
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }, 100);
-                        }
-                    });
+                            }
+                        });
+                    }, 10000); // 10000 ms = 10 detik
                 })
                 .catch(error => {
                     console.error('Error:', error);
